@@ -1,0 +1,65 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 596acc2ac25cba14d6e377b3f915249b91baf0730b6f24b4e675b2f0a28607ad
+
+name:           power-scheme-with-haskell
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/githubuser/power-scheme-with-haskell#readme>
+homepage:       https://github.com/githubuser/power-scheme-with-haskell#readme
+bug-reports:    https://github.com/githubuser/power-scheme-with-haskell/issues
+author:         Anthony Su
+maintainer:     tonyfloater@gmail.com
+copyright:      2018 Anthony SU
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/power-scheme-with-haskell
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  exposed-modules:
+      C1.C1E1
+      C1.C1E2
+      C1.C1E3
+      Lib
+  other-modules:
+      Paths_power_scheme_with_haskell
+  default-language: Haskell2010
+
+executable power-scheme-with-haskell-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , power-scheme-with-haskell
+  other-modules:
+      Paths_power_scheme_with_haskell
+  default-language: Haskell2010
+
+test-suite power-scheme-with-haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , power-scheme-with-haskell
+  other-modules:
+      Paths_power_scheme_with_haskell
+  default-language: Haskell2010
