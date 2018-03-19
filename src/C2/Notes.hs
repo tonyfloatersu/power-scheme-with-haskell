@@ -40,3 +40,12 @@ parseAtom            =  atomBool
     atomBool "#t"    = Bool True
     atomBool "#f"    = Bool False
     atomBool s       = Atom s
+
+parseNumber :: Parser LispVal
+parseNumber    =  Number . read
+              <$> many1 digit
+
+parseExpr :: Parser LispVal
+parseExpr    =  parseAtom
+            <|> parseNumber
+            <|> parseString
