@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 769479d876eb6319f357e18608653be57186ab92bc2534f44cbfffc7d8b1092c
+-- hash: aa72b4a63aa48d1961f5d0f37fbb49d015b8971ed64d36f761edff05fdba7be4
 
 name:           power-scheme-with-haskell
 version:        0.1.0.0
@@ -36,6 +36,7 @@ library
       C1.C1E2
       C1.C1E3
       C2.C2E1
+      C2.Notes
       Lib
   other-modules:
       Paths_power_scheme_with_haskell
