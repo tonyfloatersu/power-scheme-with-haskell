@@ -11,8 +11,8 @@ spaces    = skipMany1 space
 
 callParserExample :: Parser a -> String -> String
 callParserExample func input    = case parse func "lisp" input of
-                                      Left err -> "No match: " ++ show err
-                                      Right _  -> "Found value"
+                                    Left err -> "No match: " ++ show err
+                                    Right _  -> "Found value"
 
 sampleParserIO :: IO ()
 sampleParserIO    =  getArgs
@@ -31,3 +31,12 @@ parseString    =  char '"'
               >>  many (noneOf "\"")
               >>= \x -> char '"'
               >>= \_ -> return $ String x
+
+parseAtom :: Parser LispVal
+parseAtom            =  atomBool
+                    <$> (((++) . (: []) <$> (letter <|> symbol))
+                    <*> many (letter <|> symbol <|> digit)) where
+    atomBool :: String -> LispVal
+    atomBool "#t"    = Bool True
+    atomBool "#f"    = Bool False
+    atomBool s       = Atom s
