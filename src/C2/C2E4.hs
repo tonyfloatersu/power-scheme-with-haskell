@@ -1,32 +1,50 @@
 module C2.C2E4 where
 
 import           Numeric
-import           C2.Notes (LispVal (..), parseAtom)
+import qualified C2.Notes as N
 import           Text.ParserCombinators.Parsec hiding (spaces)
-import           C2.C2E3 (escapeCharacter)
+import qualified C2.C2E3 as C2E3
+import           Data.Char (digitToInt)
 
 symbol :: Parser Char
 symbol    = oneOf "!$%|*+-/:<=?>@^_~"
 
-parseBool :: Parser LispVal
+parseBool :: Parser N.LispVal
 parseBool    =  char '#'
             >>  oneOf "tf"
             >>= \x -> if x == 't'
-                      then (return . Bool) True
-                      else (return . Bool) False
+                      then (return . N.Bool) True
+                      else (return . N.Bool) False
 
-parseString :: Parser LispVal
-parseString    =  char '"'
-              >>  (many $ many1 (noneOf "\"\\")
-              <|>         escapeCharacter)
-              >>= \x -> char '"'
-              >>= \_ -> (pure . String . concat) x
+parseStringA :: Parser N.LispVal
+parseStringA    =  char '"'
+               >>  (many $ many1 (noneOf "\"\\")
+               <|>         C2E3.escapeCharacter)
+               >>= \x -> char '"'
+               >>= \_ -> (pure . N.String . concat) x
 
-parseNumber :: Parser LispVal
-parseNumber    = undefined
+parseDigit :: Parser N.LispVal
+parseDigit    = N.Number . read <$> many1 digit
 
-parseExpr :: Parser LispVal
-parseExpr    =  parseBool
-            <|> parseNumber
-            <|> parseString
-            <|> parseAtom
+parseSymbDigit :: String -> (String -> Integer) -> Parser Char -> Parser N.LispVal
+parseSymbDigit prefix func scope    = N.Number . func
+                                   <$> ((try . string) prefix >> many1 scope)
+
+parseNumberA :: Parser N.LispVal
+parseNumberA    =  parseDigit
+               <|> parseSymbDigit "#d" read digit
+               <|> parseSymbDigit "#o" (fst . head . readOct) octDigit
+               <|> parseSymbDigit "#x" (fst . head . readHex) hexDigit
+               <|> parseSymbDigit "#b" (foldl (\y z -> 2 * y + toInteger (digitToInt z)) 0)
+                                       (oneOf "01")
+
+parseExprA :: Parser N.LispVal
+parseExprA    =  parseBool
+             <|> parseNumberA
+             <|> parseStringA
+             <|> N.parseAtom
+
+parseTestExpr :: String -> String
+parseTestExpr str    = case parse parseExprA "lisp" str of
+                         Left err -> show err
+                         Right rs -> show rs

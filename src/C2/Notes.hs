@@ -25,6 +25,7 @@ data LispVal = Atom String
              | Number Integer
              | String String
              | Bool Bool
+             deriving ( Eq, Show )
 
 parseString :: Parser LispVal
 parseString    =  char '"'
